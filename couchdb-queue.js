@@ -45,7 +45,7 @@ var queue = function( database, inputCode ) {
                     var taskID = task.id;
                     var taskItem = task.doc;
 
-                    inputCode( taskItem, function() {
+                    inputCode( taskItem, function( persist ) {
                         //////////////////////////////////
                         // Local (async.queue) Callback //
                         //////////////////////////////////
