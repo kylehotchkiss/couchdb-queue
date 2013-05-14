@@ -49,10 +49,14 @@ var queue = function( database, inputCode ) {
                         //////////////////////////////////
                         // Local (async.queue) Callback //
                         //////////////////////////////////
-
-                        // we should handle getting rid of queue items too
-                        // unless persist is specificifed which will be handled in the next iteration
-                        callback();
+                        if ( !persist ) {
+                            database.remove( db_path + taskID, function( results, error ) {
+                               callback();
+                            });
+                        } else {
+                            callback();
+                        }
+                        
                     });
                 });
 
