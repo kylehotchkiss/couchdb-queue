@@ -12,6 +12,7 @@
  * How do we handle passing DB and queue sources? Config object?
  *
  */
+var async = require('async');
 var couchdb = require('couchdb-simple');
 
 var queue = function( database, inputCode ) {
@@ -38,38 +39,44 @@ var queue = function( database, inputCode ) {
                 //////////////////////////////
                 sleep();
             } else {
-                var batch = async.queue( function( task, callback ) {
-                    /////////////////////////////////////////////////
-                    // Break apart the CouchDB object, use as Task //
-                    /////////////////////////////////////////////////
-                    var taskID = task.id;
-                    var taskItem = task.doc;
-
-                    inputCode( taskItem, function( persist ) {
-                        //////////////////////////////////
-                        // Local (async.queue) Callback //
-                        //////////////////////////////////
-                        if ( !persist ) {
-                            database.remove( db_path + taskID, function( results, error ) {
-                               callback();
-                            });
-                        } else {
-                            callback();
-                        }
-                        
+                if ( results.rows[0] ) {
+                    var batch = async.queue( function( task, callback ) {
+                        /////////////////////////////////////////////////
+                        // Break apart the CouchDB object, use as Task //
+                        /////////////////////////////////////////////////
+                        var taskID = task.id;
+                        var taskItem = task.doc;
+    
+                        inputCode( taskItem, function( persist ) {
+                            //////////////////////////////////
+                            // Local (async.queue) Callback //
+                            //////////////////////////////////
+                            if ( !persist ) {
+                                database.remove( db_path + taskID, function( results, error ) {
+                                   callback();
+                                });
+                            } else {
+                                callback();
+                            }
+                            
+                        });
                     });
-                });
-
-                batch.push( results.rows );
-
-                batch.drain = function() {
-                    ///////////////////
-                    // Exit the Loop //
-                    ///////////////////
+                    
+                    batch.push( results.rows );
+    
+                    batch.drain = function() {
+                        ///////////////////
+                        // Exit the Loop //
+                        ///////////////////
+                        sleep();
+                    }
+                } else {
+                    /////////////////////////
+                    // Sleep if no results //
+                    /////////////////////////
                     sleep();
                 }
             }
-
         });
     }
 

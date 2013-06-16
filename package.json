@@ -1,22 +1,23 @@
 {
-  "name": "couchdb-queue",
-  "version": "0.0.0",
-  "description": "A CouchDB based queue system, aiming to be bulletproof.",
-  "main": "couchdb-queue.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kylehotchkiss/couchdb-queue"
-  },
-  "keywords": [
-    "couchdb",
-    "queue"
-  ],
-  "dependencies": {
-    "couchdb-simple": "*"
-  },
-  "author": "Kyle Hotchkiss",
-  "license": "GPL"
+    "name": "couchdb-queue",
+    "version": "0.0.0",
+    "description": "A CouchDB based queue system, aiming to be bulletproof.",
+    "main": "couchdb-queue.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kylehotchkiss/couchdb-queue"
+    },
+    "keywords": [
+        "couchdb",
+        "queue"
+    ],
+    "dependencies": {
+        "async": "*",
+        "couchdb-simple": "*"
+    },
+    "author": "Kyle Hotchkiss",
+    "license": "GPL"
 }
